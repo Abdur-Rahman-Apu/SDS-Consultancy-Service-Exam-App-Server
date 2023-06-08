@@ -22,8 +22,6 @@ app.listen(port, () => {
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.uq4fq8s.mongodb.net/?retryWrites=true&w=majority`;
 
-console.log(uri);
-
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
   serverApi: {
@@ -45,6 +43,16 @@ async function run() {
     const cursor = employeesCollection.find({});
     const result = await cursor.toArray();
     res.send(result);
+  });
+
+  //get only employees data
+  app.get("/onlyEmployees", async (req, res) => {
+    const cursor = employeesCollection.find({});
+    const result = await cursor.toArray();
+    const onlyEmployeesData = result.filter(
+      (employee) => employee.role !== "admin"
+    );
+    res.send(onlyEmployeesData);
   });
 
   // get certification data
