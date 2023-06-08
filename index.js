@@ -8,6 +8,11 @@ app.use(express.json());
 const port = process.env.PORT || 5000;
 require("dotenv").config();
 
+// test
+app.get("/", async (req, res) => {
+  res.send("Server is running");
+});
+
 app.listen(port, () => {
   console.log("Server is running on port", port);
 });
@@ -29,9 +34,24 @@ const client = new MongoClient(uri, {
 });
 
 async function run() {
-  // test
-  app.get("/", async (req, res) => {
-    res.send("Server is running");
+  // collections
+  const employeesCollection = client.db("Exam").collection("Employees");
+  const certificationsCollection = client
+    .db("Exam")
+    .collection("Certifications");
+
+  //get employees data
+  app.get("/employees", async (req, res) => {
+    const cursor = employeesCollection.find({});
+    const result = await cursor.toArray();
+    res.send(result);
+  });
+
+  // get certification data
+  app.get("/certifications", async (req, res) => {
+    const cursor = certificationsCollection.find({});
+    const result = await cursor.toArray();
+    res.send(result);
   });
 }
 run().catch((err) => {
