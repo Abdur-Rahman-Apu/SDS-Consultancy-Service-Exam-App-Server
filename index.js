@@ -78,8 +78,6 @@ async function run() {
 
     const result = await employeesCollection.updateOne(query, updateDoc);
 
-    console.log(result);
-
     res.send(result);
   });
 }
