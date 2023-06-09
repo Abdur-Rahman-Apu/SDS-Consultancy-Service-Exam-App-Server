@@ -62,6 +62,8 @@ async function run() {
     res.send(result);
   });
 
+  // Api which is needed for admin
+
   // update admin password
   app.patch("/updateAdminPassword", async (req, res) => {
     const id = req.query;
@@ -85,6 +87,15 @@ async function run() {
   app.post("/addEmployee", async (req, res) => {
     const query = req.body;
     const result = await employeesCollection.insertOne(query);
+    res.send(result);
+  });
+
+  // delete an employee
+
+  app.delete("/deleteEmployee", async (req, res) => {
+    const id = req.query.id;
+    const query = { _id: new ObjectId(id) };
+    const result = await employeesCollection.deleteOne(query);
     res.send(result);
   });
 }
