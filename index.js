@@ -80,6 +80,13 @@ async function run() {
 
     res.send(result);
   });
+
+  // add a new employee
+  app.post("/addEmployee", async (req, res) => {
+    const query = req.body;
+    const result = await employeesCollection.insertOne(query);
+    res.send(result);
+  });
 }
 run().catch((err) => {
   console.log(err);
