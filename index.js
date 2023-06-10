@@ -67,7 +67,7 @@ async function run() {
   app.get("/certifications/:courseName", async (req, res) => {
     const query = req.params;
     const result = await certificationsCollection.findOne(query);
-    console.log(result);
+    res.send(result);
   });
 
   // Api which is needed for admin
