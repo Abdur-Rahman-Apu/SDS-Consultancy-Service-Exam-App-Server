@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 
 const cors = require("cors");
+const util = require("node:util");
 app.use(cors());
 app.use(express.json());
 
@@ -96,6 +97,31 @@ async function run() {
     const id = req.query.id;
     const query = { _id: new ObjectId(id) };
     const result = await employeesCollection.deleteOne(query);
+    res.send(result);
+  });
+
+  // add question in to the specific course
+  app.patch("/addQuestion", async (req, res) => {
+    const filter = req.query.courseName;
+    const question = req.body;
+
+    const findCourse = await certificationsCollection.findOne({
+      courseName: filter,
+    });
+
+    console.log(findCourse.questionPaper);
+
+    question.forEach((item) => {
+      const pi = JSON.parse(item);
+
+      findCourse.questionPaper.push(pi);
+    });
+
+    const result = await certificationsCollection.replaceOne(
+      { courseName: filter },
+      findCourse
+    );
+
     res.send(result);
   });
 }
