@@ -63,6 +63,13 @@ async function run() {
     res.send(result);
   });
 
+  // get specific course
+  app.get("/certifications/:courseName", async (req, res) => {
+    const query = req.params;
+    const result = await certificationsCollection.findOne(query);
+    console.log(result);
+  });
+
   // Api which is needed for admin
 
   // update admin password
@@ -108,8 +115,6 @@ async function run() {
     const findCourse = await certificationsCollection.findOne({
       courseName: filter,
     });
-
-    console.log(findCourse.questionPaper);
 
     question.forEach((item) => {
       const pi = JSON.parse(item);
