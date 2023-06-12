@@ -75,7 +75,7 @@ async function run() {
     const id = req.query.id;
     const filter = { _id: new ObjectId(id) };
     const result = await employeesCollection.findOne(filter);
-    console.log(result);
+
     res.send(result);
   });
 
@@ -125,11 +125,17 @@ async function run() {
       courseName: filter,
     });
 
+    findCourse.questionPaper = [];
+
+    console.log(findCourse.questionPaper);
+
     question.forEach((item) => {
       const pi = JSON.parse(item);
 
       findCourse.questionPaper.push(pi);
     });
+
+    console.log(findCourse.questionPaper.length);
 
     const result = await certificationsCollection.replaceOne(
       { courseName: filter },
@@ -155,8 +161,6 @@ async function run() {
 
   // store employees result
   app.patch("/userResult", async (req, res) => {
-    console.log(req.body);
-    console.log(req.query);
     if (req.body.totalMark >= 0) {
       const id = req.query.id;
       const markData = req.body;
@@ -165,13 +169,9 @@ async function run() {
 
       const specificEmployee = await employeesCollection.findOne(filter);
 
-      console.log(specificEmployee);
-
       const courseName = markData.courseName;
 
       specificEmployee.result[`${courseName}`].unshift(markData);
-
-      console.log(specificEmployee.result);
 
       const replacement = {
         ...specificEmployee,
