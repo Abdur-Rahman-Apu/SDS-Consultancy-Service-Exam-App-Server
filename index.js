@@ -70,6 +70,15 @@ async function run() {
     res.send(result);
   });
 
+  //get specific employee
+  app.get("/onlySpecificEmployee", async (req, res) => {
+    const id = req.query.id;
+    const filter = { _id: new ObjectId(id) };
+    const result = await employeesCollection.findOne(filter);
+    console.log(result);
+    res.send(result);
+  });
+
   // Api which is needed for admin
 
   // update admin password
@@ -140,10 +149,38 @@ async function run() {
         regId: newRegId,
       },
     };
-
     const result = await employeesCollection.updateOne(filter, updateDoc);
-
     res.send(result);
+  });
+
+  // store employees result
+  app.patch("/userResult", async (req, res) => {
+    console.log(req.body);
+    console.log(req.query);
+    if (req.body.totalMark >= 0) {
+      const id = req.query.id;
+      const markData = req.body;
+
+      const filter = { _id: new ObjectId(id) };
+
+      const specificEmployee = await employeesCollection.findOne(filter);
+
+      console.log(specificEmployee);
+
+      const courseName = markData.courseName;
+
+      specificEmployee.result[`${courseName}`].unshift(markData);
+
+      console.log(specificEmployee.result);
+
+      const replacement = {
+        ...specificEmployee,
+      };
+
+      const result = await employeesCollection.replaceOne(filter, replacement);
+
+      res.send(result);
+    }
   });
 }
 run().catch((err) => {
