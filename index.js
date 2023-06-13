@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 
 const cors = require("cors");
-const util = require("node:util");
 app.use(cors());
 app.use(express.json());
 
@@ -127,15 +126,11 @@ async function run() {
 
     findCourse.questionPaper = [];
 
-    console.log(findCourse.questionPaper);
-
     question.forEach((item) => {
       const pi = JSON.parse(item);
 
       findCourse.questionPaper.push(pi);
     });
-
-    console.log(findCourse.questionPaper.length);
 
     const result = await certificationsCollection.replaceOne(
       { courseName: filter },
