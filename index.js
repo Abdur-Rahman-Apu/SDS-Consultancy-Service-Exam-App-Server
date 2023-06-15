@@ -154,6 +154,27 @@ async function run() {
     res.send(result);
   });
 
+  // assign a new course
+  app.patch("/assignCourses", async (req, res) => {
+    const id = req.query.id;
+    const query = { _id: new ObjectId(id) };
+    const { assignCourse } = req.body;
+    console.log(id);
+    console.log(assignCourse);
+
+    const specificEmployee = await employeesCollection.findOne(query);
+
+    specificEmployee.result[assignCourse] = [];
+    const updateDoc = {
+      $set: {
+        result: specificEmployee.result,
+      },
+    };
+
+    const result = await employeesCollection.updateOne(query, updateDoc);
+    res.send(result);
+  });
+
   // store employees result
   app.patch("/userResult", async (req, res) => {
     if (req.body.totalMark >= 0) {
