@@ -154,6 +154,32 @@ async function run() {
     res.send(result);
   });
 
+  app.patch("/updateEmployeeInfo", async (req, res) => {
+    console.log(req.query);
+
+    const id = req.query;
+
+    const filter = { _id: new ObjectId(id) };
+
+    console.log(filter);
+    console.log(req.body);
+
+    const name = req.body.name;
+    const regId = req.body.regId;
+    const password = req.body.password;
+
+    const updateDoc = {
+      $set: {
+        name: name,
+        regId: regId,
+        password: password,
+      },
+    };
+
+    const result = await employeesCollection.updateOne(filter, updateDoc);
+    res.send(result);
+  });
+
   // assign a new course
   app.patch("/assignCourses", async (req, res) => {
     const id = req.query.id;
