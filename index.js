@@ -142,20 +142,6 @@ async function run() {
     res.send(result);
   });
 
-  // update employees registration id
-  app.patch("/updateEmployeeId", async (req, res) => {
-    const id = req.query.id;
-    const filter = { _id: new ObjectId(id) };
-    const newRegId = req.body.newId;
-    const updateDoc = {
-      $set: {
-        regId: newRegId,
-      },
-    };
-    const result = await employeesCollection.updateOne(filter, updateDoc);
-    res.send(result);
-  });
-
   app.patch("/updateEmployeeInfo", async (req, res) => {
     console.log(req.query);
 
