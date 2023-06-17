@@ -81,15 +81,17 @@ async function run() {
   // Api which is needed for admin
 
   // update admin password
-  app.patch("/updateAdminPassword", async (req, res) => {
+  app.patch("/updateAdminInfo", async (req, res) => {
     const id = req.query;
 
     const query = { _id: new ObjectId(id) };
 
     const newPassword = req.body.password;
+    const newRegId = req.body.regId;
 
     const updateDoc = {
       $set: {
+        regId: newRegId,
         password: newPassword,
       },
     };
